@@ -7,7 +7,7 @@ const splitTextIntoSMS = (str: string): Array<string> => {
     for (let i = 0; i < words.length; i++) {
         const word = words[i]
 
-        if ((currentElement.length + word.length + 4) < 140) {
+        if ((currentElement.length + word.length + elements.length.toString().length + 3) <= 140) {
             currentElement += (currentElement.length == 0 ? '' : " ") + word
         } else {
             elements.push(currentElement)
