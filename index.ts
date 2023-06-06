@@ -1,28 +1,33 @@
 const splitTextIntoSMS = (str: string): Array<string> => {
+    const maxLengthFragment: number = 140
+    const lengthPrefix = 4
+
     const words: Array<string> = str.split(' ')
+    
+    let currentFragment = '';
+    const fragments: Array<string> = words.reduce((acc, word) => {
+        const currentLengthFragment = currentFragment.length + word.length + acc.length.toString().length + lengthPrefix;
+        const pastWord = currentFragment + (currentFragment.length > 0 ? ' ' : '')
 
-    const elements: Array<string> = []
-    let currentElement: string = ''
-
-    for (let i = 0; i < words.length; i++) {
-        const word = words[i]
-
-        if ((currentElement.length + word.length + elements.length.toString().length + 3) <= 140) {
-            currentElement += (currentElement.length == 0 ? '' : " ") + word
+        if (currentLengthFragment <= maxLengthFragment) {
+          currentFragment = pastWord + word;
         } else {
-            elements.push(currentElement)
-            currentElement = word
+          acc.push(currentFragment);
+          currentFragment = word;
         }
+    
+        return acc;
+      }, []);
+
+    fragments.push(currentFragment);
+
+    const fragmentsLength = fragments.length
+
+    if (fragmentsLength === 1) {
+        return fragments;
     }
 
-    elements.push(currentElement)
-
-    if(elements.length == 1) {
-        return elements
-    } else {
-        return elements.map((item, index) => `${item} ${index+1}/${elements.length}`)
-    }
-
+    return fragments.map((item, index) => `${item} ${index + 1}/${fragmentsLength}`);
 }
 
 module.exports = splitTextIntoSMS

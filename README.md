@@ -15,7 +15,7 @@
 
 ```bash
 $ npm install
-
+$ npm install -g typescript
 ```
 
 ## Running the app
